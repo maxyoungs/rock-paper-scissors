@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style>
+  </style>
+</head>
+<body>
+  <button id="rock">Rock</button>
+  <button id="paper">Paper</button>
+  <button id="scissors">Scissors</button>
+  <div id="results">
+      <p id="games-played">Total games played: </p>
+      <p id="user-score">Your score is: </p>
+      <p id="comp-score">The computer score is: </p>
+  </div>
+  <script>
+    function playRound(computerSelection,playerSelection) {
+        compSelect = computerSelection.toLowerCase();
+        playSelect = playerSelection.toLowerCase();
+        let result = "tied"
+        if (compSelect == "rock") {
+            switch (playSelect) {
+                case "paper":
+                result = "user";
+                break;
+                case "scissors":
+                result = "computer";
+                break;
+            }
+        } else if (compSelect == "paper") {
+            switch (playSelect) {
+                case "scissors":
+                result = "user";
+                break;
+                case "rock":
+                result = "computer";
+                break;
+            }
+        } else if (compSelect == "scissors") {
+            switch (playSelect) {
+                case "rock":
+                result = "user";
+                break;
+                case "paper":
+                result = "computer";
+                break;
+            }
+        }
+        return result;
+    }
+
+    function randomSelect () {
+        selection = Math.floor(Math.random() * 3);
+        switch (selection) {
+            case 0:
+            computerSelection = "rock";
+            break;
+            case 1:
+            computerSelection = "paper";
+            break;
+            case 2:
+            computerSelection = "scissors";
+            break;
+        }
+        return computerSelection;
+    }
+
+    // variables used to keep track of the score up to a total of 5 games played
+    let userScore = 0;
+    let compScore = 0;
+    let gamesPlayed = 0;
+    let maxNumGames = 5;
+
+    const result = document.querySelector('#results');
+    const winner = document.createElement('div');
+
+    const buttons = document.querySelectorAll('button');
+
+    // we use the .forEach method to iterate through each button
+    buttons.forEach((button) => {
+
+    // and for each one we add a 'click' listener
+    button.addEventListener('click', (e) => {
+        let roundWinner = playRound(randomSelect(),button.id);
+        gamesPlayed++;
+        if (roundWinner == 'user') {
+            userScore++;
+        } else if (roundWinner == 'computer') {
+            compScore++;
+        }
+        document.getElementById('user-score').textContent = "Your score is: " + userScore;
+        document.getElementById('comp-score').textContent = "The computer score is: " + compScore;
+        document.getElementById('games-played').textContent = "Total games played is: " + gamesPlayed;
+        console.log(gamesPlayed);
+        if (gamesPlayed >= maxNumGames) {
+          if (userScore > compScore) {
+              winner.textContent = "Congrats! You are the winner";
+          } else if (compScore > userScore) {
+              winner.textContent = "I'm sorry, you lost";
+          } else {
+              winner.textContent = "Okay. You tied";
+          }
+        }
+      });
+    });
+    
+    result.appendChild(winner);
+    
+
+  </script>
+</body>
+</html>
